@@ -5,7 +5,7 @@ const request = require('superagent');
 const cronTime = "1 * * * * *"; // every 1 min
 const language = 'ja';
 
-const checkRate = 1.5;
+const checkRate = 1.015;
 const checkMin = 15; // must over 2
 const stopMin = 30;
 
@@ -76,7 +76,8 @@ const checkRates = () => {
     if (high / low < checkRate) {
       return;
     }
-    let fluctuation = Math.floor(high / low * 100) / 100
+    let fluctuation = (Math.floor(high / low * 1000) / 1000 - 1) * 100;
+    fluctuation = Math.floor(fluctuation * Math.pow(10, 2)) / Math.pow(10, 2);
     let sign = plus ? '高騰' : '下落';
     const voice = `${k}が${fluctuation}パーセント${sign}しました`;
     notifications.push(voice);
